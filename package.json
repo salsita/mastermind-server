@@ -5,7 +5,8 @@
   "main": "./lib/client/index.js",
   "scripts": {
     "build": "babel ./src --out-dir lib",
-    "start": "babel-node ./src/server/server.js",
+    "postinstall": "npm run build",
+    "start": "node ./lib/server/server.js",
     "lint": "eslint ./src"
   },
   "author": "Tomas Weiss <tomasw@salsitasoft.com>",
