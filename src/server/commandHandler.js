@@ -51,16 +51,26 @@ export default (users, games, guesses, ratings) => {
   };
 
   const handleStartGame = async (payload, user) => {
-    await games
-      .push()
-      .set({
-        turn: 0,
-        created: firebase.database.ServerValue.TIMESTAMP,
-        user,
-        over: false,
-        found: false,
-        cipher: generateCipher()
-      });
+    const userGames = (
+      await games
+      .orderByChild('user')
+      .equalTo(user)
+      .once('value')
+    ).val();
+
+    // Either user has no games or all of them have already finished
+    if (!userGames || Object.keys(userGames).every(gameId => userGames[gameId].over)) {
+      await games
+        .push()
+        .set({
+          turn: 0,
+          created: firebase.database.ServerValue.TIMESTAMP,
+          user,
+          over: false,
+          found: false,
+          cipher: generateCipher()
+        });
+    }
   };
 
   const handleDeleteGame = async (payload, user) => {

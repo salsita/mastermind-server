@@ -12,7 +12,9 @@ import waitForAI from './waitForAI';
 import isGameInProgress from './isGameInProgress';
 import getActiveGame from './getActiveGame';
 import getEmptyRating from './getEmptyRating';
+import getBestGames from './getBestGames';
 import isGameOver from '../server/isGameOver';
+import hasFoundCipher from '../server/hasFoundCipher';
 import { MAX_TURNS, PEGS_COUNT, COLORS_COUNT } from '../server/constants';
 
 export default (firebaseConfig, eventChannel) => {
@@ -45,7 +47,9 @@ export default (firebaseConfig, eventChannel) => {
     waitForAI: waitForAI(ratings, guesses),
     isGameInProgress: isGameInProgress(games),
     getActiveGame: getActiveGame(games, guesses, ratings),
+    getBestGames: getBestGames(games, users),
     isGameOver,
+    hasFoundCipher,
     getEmptyRating,
     MAX_TURNS,
     PEGS_COUNT,
