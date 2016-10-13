@@ -8,9 +8,9 @@ import createAuthStateChangesChannel from './createAuthStateChangesChannel';
 import startGame from './startGame';
 import deleteActiveGame from './deleteActiveGame';
 import playerGuess from './playerGuess';
-import waitForAI from './waitForAI';
 import isGameInProgress from './isGameInProgress';
 import getActiveGame from './getActiveGame';
+import getGame from './getGame';
 import getEmptyRating from './getEmptyRating';
 import getBestGames from './getBestGames';
 import isGameOver from '../server/isGameOver';
@@ -43,10 +43,10 @@ export default (firebaseConfig, eventChannel) => {
     createAuthStateChangesChannel: createAuthStateChangesChannel(eventChannel),
     startGame: startGame(commands, auth),
     deleteActiveGame: deleteActiveGame(commands, auth),
-    playerGuess: playerGuess(commands, auth),
-    waitForAI: waitForAI(ratings, guesses),
+    playerGuess: playerGuess(commands, auth, ratings, guesses, games),
     isGameInProgress: isGameInProgress(games),
     getActiveGame: getActiveGame(games, guesses, ratings),
+    getGame: getGame(games, guesses, ratings),
     getBestGames: getBestGames(games, users),
     isGameOver,
     hasFoundCipher,

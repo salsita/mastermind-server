@@ -106,7 +106,7 @@ export default (users, games, guesses, ratings) => {
     ));
   };
 
-  const handleNewGuess = async ({ turn, guess }, user) => {
+  const handleNewGuess = async ({ guess }, user) => {
     const userGames = (
       await games
         .orderByChild('user')
@@ -120,12 +120,21 @@ export default (users, games, guesses, ratings) => {
       const rating = getRating(guess, [...activeGame.cipher]);
       const nextTurn = activeGame.turn + 1;
 
+      const newGame = {
+        ...activeGame,
+        turn: nextTurn,
+        ratings: [{
+          turn: 1,
+          rating
+        }]
+      };
+
       await games
         .child(activeGameId)
         .update({
           turn: nextTurn,
-          found: hasFoundCipher(rating),
-          over: isGameOver(turn, rating)
+          found: hasFoundCipher(newGame),
+          over: isGameOver(newGame)
         });
 
       await guesses
@@ -133,7 +142,7 @@ export default (users, games, guesses, ratings) => {
         .set({
           game: activeGameId,
           guess,
-          turn,
+          turn: activeGame.turn,
           user
         });
 
@@ -142,7 +151,7 @@ export default (users, games, guesses, ratings) => {
         .set({
           game: activeGameId,
           rating,
-          turn,
+          turn: activeGame.turn,
           user
         });
     } else {

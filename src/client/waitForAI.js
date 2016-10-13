@@ -1,4 +1,15 @@
-export default (ratings, guesses) => (turn, gameId) => new Promise((res) => {
+export default (ratings, guesses, games) => () => new Promise(async (res) => {
+  const activeGames = (
+    await games
+      .orderByChild('over')
+      .equalTo(false)
+      .once('value')
+  ).val();
+
+  const gameId = Object.keys(activeGames)[0];
+  const game = activeGames[gameId];
+  const turn = game.turn;
+
   const ratingRef = ratings
     .orderByChild('game')
     .equalTo(gameId);
