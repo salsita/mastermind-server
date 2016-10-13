@@ -1,10 +1,12 @@
-export default (games, guesses, ratings) => async () => {
+export default (games, guesses, ratings, auth) => async () => {
   const activeGames = (await games
     .orderByChild('over')
     .equalTo(false)
     .once('value')).val();
 
-  const activeGameId = Object.keys(activeGames)[0];
+  const activeGameId = Object
+    .keys(activeGames)
+    .filter(gameId => activeGames[gameId].user === auth.currentUser.uid)[0];
 
   const guessMap = (await guesses
     .orderByChild('game')

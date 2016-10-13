@@ -1,4 +1,4 @@
-export default (ratings, guesses, games) => () => new Promise(async (res) => {
+export default (ratings, guesses, games, auth) => () => new Promise(async (res) => {
   const activeGames = (
     await games
       .orderByChild('over')
@@ -6,7 +6,10 @@ export default (ratings, guesses, games) => () => new Promise(async (res) => {
       .once('value')
   ).val();
 
-  const gameId = Object.keys(activeGames)[0];
+  const gameId = Object
+    .keys(activeGames)
+    .find(activeGameId => activeGames[activeGameId].user === auth.currentUser.uid);
+
   const game = activeGames[gameId];
   const turn = game.turn;
 

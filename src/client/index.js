@@ -11,11 +11,7 @@ import playerGuess from './playerGuess';
 import isGameInProgress from './isGameInProgress';
 import getActiveGame from './getActiveGame';
 import getGame from './getGame';
-import getEmptyRating from './getEmptyRating';
 import getBestGames from './getBestGames';
-import isGameOver from '../server/isGameOver';
-import hasFoundCipher from '../server/hasFoundCipher';
-import { MAX_TURNS, PEGS_COUNT, COLORS_COUNT } from '../server/constants';
 
 export default (firebaseConfig, eventChannel) => {
   const db = firebase
@@ -32,27 +28,21 @@ export default (firebaseConfig, eventChannel) => {
   const guesses = db.child('guesses');
 
   return {
+    createAuthStateChangesChannel: createAuthStateChangesChannel(eventChannel),
+    createUsersChannel: createUsersChannel(users, eventChannel),
+    deleteActiveGame: deleteActiveGame(commands, auth),
+    getActiveGame: getActiveGame(games, guesses, ratings, auth),
+    getBestGames: getBestGames(games, users, guesses, ratings),
+    getGame: getGame(games, guesses, ratings),
+    isGameInProgress: isGameInProgress(games, auth),
+    joinUser: joinUser(commands, auth),
     login: login(auth),
     logout: logout(auth),
-    joinUser: joinUser(commands, auth),
-    createUsersChannel: createUsersChannel(users, eventChannel),
+    playerGuess: playerGuess(commands, auth, ratings, guesses, games),
+    startGame: startGame(commands, auth),
     userChannelEvents: {
       USER_HAS_JOINED,
       USER_HAS_DISCONNECTED
-    },
-    createAuthStateChangesChannel: createAuthStateChangesChannel(eventChannel),
-    startGame: startGame(commands, auth),
-    deleteActiveGame: deleteActiveGame(commands, auth),
-    playerGuess: playerGuess(commands, auth, ratings, guesses, games),
-    isGameInProgress: isGameInProgress(games),
-    getActiveGame: getActiveGame(games, guesses, ratings),
-    getGame: getGame(games, guesses, ratings),
-    getBestGames: getBestGames(games, users),
-    isGameOver,
-    hasFoundCipher,
-    getEmptyRating,
-    MAX_TURNS,
-    PEGS_COUNT,
-    COLORS_COUNT
+    }
   };
 };
