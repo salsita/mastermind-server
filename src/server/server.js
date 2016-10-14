@@ -21,7 +21,8 @@ const commandHandler = createCommandHandler(
   db.child('users'),
   db.child('games'),
   db.child('guesses'),
-  db.child('ratings')
+  db.child('ratings'),
+  db.child('ciphers')
 );
 
 db

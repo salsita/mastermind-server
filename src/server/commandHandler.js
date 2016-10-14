@@ -7,7 +7,7 @@ import hasFoundCipher from './hasFoundCipher';
 import isGameOver from './isGameOver';
 import * as Commands from './commands';
 
-export default (users, games, guesses, ratings) => {
+export default (users, games, guesses, ratings, ciphers) => {
   const handleDisconnectUser = async (payload, user) => {
     const userRecord = (
       await users
@@ -60,14 +60,21 @@ export default (users, games, guesses, ratings) => {
 
     // Either user has no games or all of them have already finished
     if (!userGames || Object.keys(userGames).every(gameId => userGames[gameId].over)) {
-      await games
+      const ref = games
+        .push();
+
+      await ref.set({
+        turn: 0,
+        created: firebase.database.ServerValue.TIMESTAMP,
+        user,
+        over: false,
+        found: false
+      });
+
+      await ciphers
         .push()
         .set({
-          turn: 0,
-          created: firebase.database.ServerValue.TIMESTAMP,
-          user,
-          over: false,
-          found: false,
+          game: ref.key,
           cipher: generateCipher()
         });
     }
@@ -116,8 +123,17 @@ export default (users, games, guesses, ratings) => {
 
     const activeGameId = Object.keys(userGames).filter(id => !userGames[id].over)[0];
     if (activeGameId) {
+      const gameCiphers = (
+        await ciphers
+          .orderByChild('game')
+          .equalTo(activeGameId)
+          .once('value')
+      ).val();
+
+      const cipher = gameCiphers[Object.keys(gameCiphers)[0]].cipher;
+
       const activeGame = userGames[activeGameId];
-      const rating = getRating(guess, [...activeGame.cipher]);
+      const rating = getRating(guess, cipher);
       const nextTurn = activeGame.turn + 1;
 
       const newGame = {
