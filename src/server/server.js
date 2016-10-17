@@ -1,7 +1,13 @@
 import firebase from 'firebase';
 
-import auth from './auth.json';
 import createCommandHandler from './commandHandler';
+
+let auth;
+if (process.env.AUTH) {
+  auth = JSON.parse(process.env.AUTH);
+} else {
+  auth = require('./auth.json');
+}
 
 const firebaseConfig = {
   serviceAccount: {
