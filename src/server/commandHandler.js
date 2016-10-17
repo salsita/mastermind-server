@@ -104,10 +104,17 @@ export default (users, games, guesses, ratings, ciphers) => {
             .equalTo(userGameId)
             .once('value')).val();
 
+          const gameCiphers = (await ciphers
+            .orderByChild('game')
+            .equalTo(userGameId)
+            .once('value')).val();
+
           await Promise.all(
             map(gameGuesses, (gameGuess, gameGuessId) => guesses.child(gameGuessId).remove()));
           await Promise.all(
             map(gameRatings, (gameRating, gameRatingId) => ratings.child(gameRatingId).remove()));
+          await Promise.all(
+            map(gameCiphers, (gameCipher, gameCipherId) => ciphers.child(gameCipherId).remove()));
         }
       }
     ));

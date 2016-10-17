@@ -37,7 +37,7 @@ export default (firebaseConfig, eventChannel) => {
     isGameInProgress: isGameInProgress(games, auth),
     joinUser: joinUser(commands, auth),
     login: login(auth),
-    logout: logout(auth),
+    logout: logout(commands, auth),
     playerGuess: playerGuess(commands, auth, ratings, guesses, games),
     startGame: startGame(commands, auth),
     userChannelEvents: {
