@@ -2,22 +2,27 @@ import { concat, range } from 'lodash';
 
 import { RATING_BLACK, RATING_WHITE, RATING_NONE } from './constants';
 
-export default (guess, cipherOriginal) => {
+export default (originalGuess, cipherOriginal) => {
   const cipher = [...cipherOriginal];
+  const guess = [...originalGuess];
 
   let directMatch = 0;
   let colorMatch = 0;
 
-  for (let i = 0; i < cipher.length; i++) { // eslint-disable-line no-plusplus
+  for (let i = 0; i < cipher.length; i += 1) {
     if (guess[i] === cipher[i]) {
-      directMatch++; // eslint-disable-line no-plusplus
+      directMatch += 1;
       delete cipher[i];
-    } else {
-      const found = cipher.indexOf(guess[i]);
-      if (~found) { // eslint-disable-line no-bitwise
-        colorMatch++; // eslint-disable-line no-plusplus
-        delete cipher[found];
-      }
+      delete guess[i];
+    }
+  }
+
+  for (let i = 0; i < cipher.length; i += 1) {
+    const found = cipher.indexOf(guess[i]);
+
+    if (~found) { // eslint-disable-line no-bitwise
+      colorMatch += 1;
+      delete cipher[found];
     }
   }
 
