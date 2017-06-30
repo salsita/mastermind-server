@@ -10,6 +10,7 @@
   },
   "author": "Tomas Weiss <tomasw@salsitasoft.com>",
   "license": "MIT",
+  "files": ["lib"],
   "devDependencies": {
     "babel-eslint": "^7.0.0",
     "eslint": "^3.5.0",
