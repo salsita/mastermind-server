@@ -1,6 +1,6 @@
 {
   "name": "mastermind-server",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "mastermind server",
   "main": "./lib/client/index.js",
   "scripts": {
@@ -10,7 +10,9 @@
   },
   "author": "Tomas Weiss <tomasw@salsitasoft.com>",
   "license": "MIT",
-  "files": ["lib"],
+  "files": [
+    "lib"
+  ],
   "devDependencies": {
     "babel-eslint": "^7.0.0",
     "eslint": "^3.5.0",
